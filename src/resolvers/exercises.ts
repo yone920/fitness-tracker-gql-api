@@ -15,10 +15,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    createExercise: async (parent: void, args: exerciseInput, context: void, info: void) => {
-      console.log(parent)
-      console.log(context)
-      console.log(info)
+    createExercise: async (_parent: any, args: exerciseInput, _context: any) => {
       const { activity, description, distance } = args.exercise;
       const exercise = new Exercise({activity, description, distance})
       await exercise.save()
