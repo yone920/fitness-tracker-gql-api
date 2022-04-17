@@ -1,14 +1,14 @@
-const express = require('express')
-const { ApolloServer } = require('apollo-server-express')
-const typeDefs = require('./typeDefs')
-const resolvers = require('./resolvers')
+import express, { Application, Request, Response } from 'express'
+import { ApolloServer } from 'apollo-server-express'
+import typeDefs from "./typeDefs";
+import resolvers from './resolvers'
 const mongoose = require('mongoose')
 const dotenv = require("dotenv")
 
 dotenv.config()
 
 async function startServer() {
-  const app = express()
+  const app: Application = express()
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers
@@ -17,7 +17,8 @@ async function startServer() {
   await apolloServer.start()
   apolloServer.applyMiddleware({app, path: "/fitness"})
 
-  app.use((req, res) => {
+  app.use((req: Request, res: Response) => {
+    console.log(req)
     res.send('Hello from express apollo server')
   })
 
