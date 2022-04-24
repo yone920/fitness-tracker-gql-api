@@ -4,10 +4,10 @@ const typeDefs = gql`
 
   type User {
     id: String
-    firstName: String!
-    lastName: String!
+    fullName: String
     email: String!
     password: String!
+    token: String
   }
 
   type Query {
@@ -16,8 +16,12 @@ const typeDefs = gql`
   }
 
   input UserRegisterInput {
-    firstName: String
-    lastName: String
+    fullName: String
+    email: String
+    password: String
+  }
+
+  input LoginInput {
     email: String
     password: String
   }
@@ -26,6 +30,7 @@ const typeDefs = gql`
     registerUser(user: UserRegisterInput): User
     deleteUser(UserId: String): User
   }
+
 `
 
 export default typeDefs
