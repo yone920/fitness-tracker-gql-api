@@ -11,15 +11,23 @@ interface exerciseInput {
 const resolvers = {
   Query: {
     getAllExerceises: async () => {
-      return await Exercise.find()
+      try {
+        return await Exercise.find()
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   Mutation: {
     createExercise: async (_parent: any, args: exerciseInput, _context: any) => {
       const { activity, description, distance } = args.exercise;
-      const exercise = new Exercise({activity, description, distance})
-      await exercise.save()
-      return exercise;
+      try {
+        const exercise = new Exercise({activity, description, distance})
+        await exercise.save()
+        return exercise;
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
