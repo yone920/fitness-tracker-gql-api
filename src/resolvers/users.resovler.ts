@@ -62,9 +62,9 @@ const resolvers = {
         )
 
         newUser.token = token;
-
+        // Save new user into the DB
         const res = await newUser.save()
-
+        // Return the newly created user
         return {
           id: res.id,
           ...res._doc
