@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from 'express'
 import { ApolloServer } from 'apollo-server-express'
-import typeDefs from "./typeDefs";
-import resolvers from './resolvers'
+import typeDefs from "./typeDef/index.graphql";
+import resolvers from './resolvers/index.resolver'
 const mongoose = require('mongoose')
 const dotenv = require("dotenv")
 
@@ -11,7 +11,10 @@ async function startServer() {
   const app: Application = express()
   const apolloServer = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({req}) => ({
+      req
+    })
   })
 
   await apolloServer.start()
