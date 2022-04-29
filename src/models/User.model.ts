@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please add a passwoed'],
+    required: [true, 'Please add a passwoed']
   },
   token: {
     type: String,

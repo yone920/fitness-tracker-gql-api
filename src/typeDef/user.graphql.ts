@@ -29,6 +29,7 @@ const typeDefs = gql`
   type Mutation {
     registerUser(user: UserRegisterInput): User
     deleteUser(UserId: String): User
+    loginUser(user: LoginInput): User
   }
 
 `

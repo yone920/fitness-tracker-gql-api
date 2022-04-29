@@ -17,6 +17,23 @@ interface userId {
   userId: string
 }
 
+interface LoginInput {
+  user: {
+    email: String
+    password: String
+  }
+}
+
+const tokenGenerator = (id: String, email: String) => (
+  jwt.sign(
+    {user_id: id, email},
+    "secret__",
+    {
+      expiresIn: "2h"
+    }
+  )
+)
+
 const resolvers = {
   Query: {
     getAllUsers: async () => {
@@ -49,17 +66,11 @@ const resolvers = {
         // Encrypt password
         let encryptedPassword = await bcrypt.hash(password, 10)
 
-        // uild mongoose model (User)
+        // Build mongoose model (User)
         const newUser = new User({fullName, email: email.toLowerCase(), password: encryptedPassword})
 
         // Create JWT token
-        const token = jwt.sign(
-          {user_id: newUser.id, email},
-          "secret__",
-          {
-            expiresIn: "2h"
-          }
-        )
+        const token = tokenGenerator(newUser.id, email)
 
         newUser.token = token;
         // Save new user into the DB
@@ -80,6 +91,25 @@ const resolvers = {
         return await User.deleteOne({id: userId})
       } catch (error) {
         console.error(error)
+      }
+    },
+    loginUser: async (_parent: any, args: LoginInput, _context: any) => {
+      const {email, password} = args.user;
+
+      const user = await User.findOne({email});
+
+      if (user && (await bcrypt.compare(password, user.password))) {
+        // Create JWT token
+        const token = tokenGenerator(user.id, email)
+
+        user.token = token;
+          // Return the newly created user
+        return {
+          id: user.id,
+          ...user._doc
+        };
+      } else {
+        throw new ApolloError('Incorrect password', 'INCORRECT_PASSWORD')
       }
     }
   }
